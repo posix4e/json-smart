@@ -25,4 +25,12 @@ public class TestMisc extends TestCase {
 		assertEquals(((JSONArray)o.get("key3")).size(), 0);
 	}
 	
+	
+	public void testInt() throws Exception {
+		String s = "123";
+		Object o = JSONValue.parseWithException(s);
+		
+		assertEquals(o, 123);
+	}
+
 }
