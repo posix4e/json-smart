@@ -251,7 +251,7 @@ class JSONStringParser extends JSONBaseParser {
 		skipDigits();
 		if (c != '.' && c != 'E' && c != 'e') {
 			skipSpace();
-			if (!stop[c]) {
+			if (!stop[c] && c != EOI) {
 				// convert string
 				skipNQString(stop);
 				xs = in.substring(start, pos).trim();
