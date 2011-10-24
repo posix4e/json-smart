@@ -541,7 +541,7 @@ class JSONStringParser extends JSONBaseParser {
 		}
 	}
 
-	private void skipSpace() throws ParseException {
+	private void skipSpace() {
 		for (;;) {
 			if (c == EOI)
 				return;
