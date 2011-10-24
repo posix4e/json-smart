@@ -89,6 +89,14 @@ class JSONStreamParser extends JSONBaseParser {
 		pos++;
 	}
 
+	final private void readNoEnd() throws IOException, ParseException {
+		c = in.read();
+		//
+		//
+		if (c == EOI)
+			throw new ParseException(pos - 1, ERROR_UNEXPECTED_EOF, "EOF");
+	}
+
 	private List<Object> readArray() throws ParseException, IOException {
 		List<Object> obj = containerFactory.createArrayContainer();
 		if (c != '[')
@@ -358,7 +366,7 @@ class JSONStreamParser extends JSONBaseParser {
 				}
 				if (c == EOI)
 					throw new ParseException(pos - 1, ERROR_UNEXPECTED_EOF, null);
-				read(); /* skip : */
+				readNoEnd(); /* skip : */
 				Object duplicate = obj.put(key, readMain(stopValue));
 				if (duplicate != null)
 					throw new ParseException(keyStart, ERROR_UNEXPECTED_DUPLICATE_KEY, key);
@@ -369,6 +377,8 @@ class JSONStreamParser extends JSONBaseParser {
 					handler.endObject();
 					return obj;
 				}
+				if (c == EOI) // Fixed on 18/10/2011 reported by vladimir
+					throw new ParseException(pos - 1, ERROR_UNEXPECTED_EOF, null);
 				// if c==, continue
 				if (c == ',')
 					needData = true;

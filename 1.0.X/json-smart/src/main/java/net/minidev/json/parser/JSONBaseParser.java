@@ -36,12 +36,13 @@ abstract class JSONBaseParser {
 	protected static boolean[] stopAll = new boolean[126];
 
 	static {
-		stopKey[':'] = true;
-		stopValue[','] = stopValue['}'] = true;
-		stopArray[','] = stopArray[']'] = true;
+		byte EOI = 0x1A;
+		stopKey[':'] = stopKey[EOI] = true;
+		stopValue[','] = stopValue['}'] = stopValue[EOI] = true;
+		stopArray[','] = stopArray[']'] = stopArray[EOI] = true;
 
 		stopAll[','] = stopAll[':'] = true;
-		stopAll[']'] = stopAll['}'] = true;
+		stopAll[']'] = stopAll['}'] = stopAll[EOI] = true;
 	}
 	/*
 	 * End of static declaration

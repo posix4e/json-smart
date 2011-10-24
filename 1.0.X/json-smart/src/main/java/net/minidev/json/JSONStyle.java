@@ -31,6 +31,10 @@ public class JSONStyle {
 
 	public final static JSONStyle NO_COMPRESS = new JSONStyle();
 	public final static JSONStyle MAX_COMPRESS = new JSONStyle(-1);
+	/**
+	 * @since 1.0.9.1
+	 */
+	public final static JSONStyle LT_COMPRESS = new JSONStyle(FLAG_PROTECT_4WEB);
 
 	private boolean _protectKeys;
 	private boolean _protect4Web;
