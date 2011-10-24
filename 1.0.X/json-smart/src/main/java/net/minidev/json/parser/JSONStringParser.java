@@ -22,6 +22,7 @@ import static net.minidev.json.parser.ParseException.ERROR_UNEXPECTED_TOKEN;
 import static net.minidev.json.parser.ParseException.ERROR_UNEXPECTED_UNICODE;
 
 import java.io.IOException;
+//
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -484,7 +485,7 @@ class JSONStringParser extends JSONBaseParser {
 			case (char) 23: // End transmission block, not the same as EOT
 			case (char) 24: // Cancel line, MPE echoes !!!
 			case (char) 25: // End of medium, Control-Y interrupt
-				// case (char)26: Substitute
+				// case (char) 26: // Substitute
 			case (char) 27: // escape
 			case (char) 28: // File Separator
 			case (char) 29: // Group Separator
