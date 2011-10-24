@@ -29,11 +29,13 @@ import java.math.BigInteger;
  * @author Uriel Chemouni <uchemouni@gmail.com>
  */
 abstract class JSONBaseParser {
-	protected static boolean[] stopArray = new boolean[126];
-	protected static boolean[] stopKey = new boolean[126];
-	protected static boolean[] stopValue = new boolean[126];
-	protected static boolean[] stopX = new boolean[126];
-	protected static boolean[] stopAll = new boolean[126];
+	protected static final char MAX_STOP = 126;
+
+	protected static boolean[] stopArray = new boolean[MAX_STOP];
+	protected static boolean[] stopKey = new boolean[MAX_STOP];
+	protected static boolean[] stopValue = new boolean[MAX_STOP];
+	protected static boolean[] stopX = new boolean[MAX_STOP];
+	protected static boolean[] stopAll = new boolean[MAX_STOP];
 
 	static {
 		byte EOI = 0x1A;

@@ -387,6 +387,7 @@ class JSONStringParser extends JSONBaseParser {
 			throw new RuntimeException("Internal Error");
 		Object current = mapper.createObject();
 		boolean needData = false;
+		boolean acceptData = true;
 		for (;;) {
 			read();
 			switch (c) {
@@ -408,7 +409,7 @@ class JSONStringParser extends JSONBaseParser {
 			case ',':
 				if (needData && !acceptUselessComma)
 					throw new ParseException(pos, ERROR_UNEXPECTED_CHAR, (char) c);
-				needData = true;
+				acceptData = needData = true;
 				continue;
 			case '"':
 			case '\'':
@@ -422,6 +423,8 @@ class JSONStringParser extends JSONBaseParser {
 					if (!acceptNonQuote)
 						throw new ParseException(pos, ERROR_UNEXPECTED_TOKEN, key);
 				}
+				if (!acceptData)
+					throw new ParseException(pos, ERROR_UNEXPECTED_TOKEN, key);
 				while (c != ':' && c != EOI) {
 					read();
 				}
@@ -446,9 +449,9 @@ class JSONStringParser extends JSONBaseParser {
 					throw new ParseException(pos - 1, ERROR_UNEXPECTED_EOF, null);
 				// if c==, continue
 				if (c == ',')
-					needData = true;
+					acceptData = needData = true;
 				else
-					needData = false;
+					acceptData = needData = false;
 				continue;
 			}
 		}
