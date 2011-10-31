@@ -14,8 +14,7 @@ public class TestNavi extends TestCase {
 	}
 
 	public void testNaviWrite2() {
-		// ContainerFactory.FACTORY_ORDERED
-		// JSONNavi should keep order
+		// ContainerFactory.FACTORY_ORDERED JSONNavi should keep order
 		JSONNavi nav = new JSONNavi();
 		nav.at("name").set("toto").up().set("tutu", "V2").at("size").set("width", 10).set("higth", 35).up(3)
 				.set("FinUp", 1).at("array").add(0, 1, 2, 3, 4, 5);
@@ -28,7 +27,6 @@ public class TestNavi extends TestCase {
 
 	public void testNaviRead() {
 		String json = "{name:foo,str:null,ar:[1,2,3,4]}";
-
 		JSONNavi nav = new JSONNavi(json);
 		nav.at(5);
 		assertTrue("Navigator should be in error stat", nav.hasFailure());
@@ -39,4 +37,16 @@ public class TestNavi extends TestCase {
 		nav.up(2);
 		assertEquals("foo", nav.at("name").asString());
 	}
+	
+	public void testNaviWriteArray() {
+		String expected = "{'type':'bundle','data':[{'type':'object','name':'obj1'},{'type':'object','name':'obj2'}]}".replace('\'', '"');
+		JSONNavi nav = JSONNavi.newInstance();
+		nav.set("type", "bundle").at("data").array().at(0).set("type", "object").set("name", "obj1").up().at(1).set("type", "object").set("name", "obj2").root();
+		assertEquals(expected, nav.toString());
+		
+		nav = JSONNavi.newInstance();
+		nav.set("type", "bundle").at("data").array().atNext().set("type", "object").set("name", "obj1").up().atNext().set("type", "object").set("name", "obj2").root();
+		assertEquals(expected, nav.toString());
+	}
+
 }

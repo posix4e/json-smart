@@ -42,13 +42,17 @@ public class JSONNavi {
 	private boolean readonly = false;
 	private Object missingKey = null;
 
+	public static JSONNavi newInstance() {
+		return new JSONNavi(ContainerFactory.FACTORY_ORDERED);
+	}
+
 	public JSONNavi() {
 		this(ContainerFactory.FACTORY_ORDERED);
 	}
 
 	public JSONNavi(String json) {
 		this.root = JSONValue.parse(json);
-		this.current = root;
+		this.current = this.root;
 		readonly = true;
 	}
 
@@ -58,7 +62,7 @@ public class JSONNavi {
 	}
 
 	public JSONNavi root() {
-		this.current = root;
+		this.current = this.root;
 		this.stack.clear();
 		this.path.clear();
 		this.failure = false;
@@ -426,6 +430,21 @@ public class JSONNavi {
 		return this;
 	}
 
+	/**
+	 * Access to last + 1 the index position.
+	 * 
+	 * this method can only be used in writing mode.
+	 */
+	public JSONNavi atNext() {
+		if (failure)
+			return this;
+		if (!(current instanceof List))
+			return failure("current node is not an Array", null);
+		@SuppressWarnings("unchecked")
+		List<Object> lst = ((List<Object>) current);
+		return at(lst.size());
+	}
+	
 	/**
 	 * call up() level times.
 	 * 

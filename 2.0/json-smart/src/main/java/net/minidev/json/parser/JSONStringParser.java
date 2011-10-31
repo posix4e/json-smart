@@ -314,7 +314,7 @@ class JSONStringParser extends JSONBaseParser {
 		skipDigits();
 		if (c != '.' && c != 'E' && c != 'e') {
 			skipSpace();
-			if (!stop[c]) {
+			if (c >= 0 && c < MAX_STOP && !stop[c] && c != EOI) {
 				// convert string
 				skipNQString(stop);
 				xs = in.substring(start, pos).trim();
@@ -332,7 +332,7 @@ class JSONStringParser extends JSONBaseParser {
 		}
 		if (c != 'E' && c != 'e') {
 			skipSpace();
-			if (!stop[c]) {
+			if (c >= 0 && c < MAX_STOP && !stop[c] && c != EOI) {
 				// convert string
 				skipNQString(stop);
 				xs = in.substring(start, pos).trim();
@@ -356,7 +356,7 @@ class JSONStringParser extends JSONBaseParser {
 			read(); // skip first char
 			skipDigits();
 			skipSpace();
-			if (!stop[c]) {
+			if (c >= 0 && c < MAX_STOP && !stop[c] && c != EOI) {
 				// convert string
 				skipNQString(stop);
 				xs = in.substring(start, pos).trim();
@@ -553,7 +553,7 @@ class JSONStringParser extends JSONBaseParser {
 			case (char) 23: // End transmission block, not the same as EOT
 			case (char) 24: // Cancel line, MPE echoes !!!
 			case (char) 25: // End of medium, Control-Y interrupt
-				// case (char)26: Substitute
+				// case (char)26: // Substitute
 			case (char) 27: // escape
 			case (char) 28: // File Separator
 			case (char) 29: // Group Separator
@@ -603,14 +603,14 @@ class JSONStringParser extends JSONBaseParser {
 		for (;;) {
 			if (c == EOI)
 				return;
-			if (c >= 0 && c <= 125 && stop[c])
+			if (c >= 0 && c < MAX_STOP && stop[c])
 				return;
 			//
 			read();
 		}
 	}
 
-	private void skipSpace() throws ParseException {
+	private void skipSpace() {
 		for (;;) {
 			if (c == EOI)
 				return;
