@@ -21,12 +21,15 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 import net.minidev.json.JSONUtil;
+import net.minidev.json.annotate.JsonIgnore;
+
 /**
  * Contains all information needed to access a java field.
  * 
  * field, getter setter
  * 
  * this object is used internally by BeansAcces
+ * 
  * @see BeansAccess
  * 
  * @author uriel Chemouni
@@ -61,6 +64,12 @@ public class Accessor {
 
 	public Accessor(Class<?> c, Field field) {
 		int m = field.getModifiers();
+		JsonIgnore ignore = field.getAnnotation(JsonIgnore.class);
+		if (ignore != null)
+			if (ignore.value())
+				return;
+			else
+				m &= ~(Modifier.TRANSIENT);
 		if ((m & (Modifier.STATIC | Modifier.TRANSIENT)) > 0)
 			return;
 		if ((m & Modifier.PUBLIC) > 0) {
