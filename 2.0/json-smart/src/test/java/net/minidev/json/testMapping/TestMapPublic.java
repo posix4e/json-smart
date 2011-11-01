@@ -11,7 +11,7 @@ public class TestMapPublic extends TestCase {
 	}
 
 	String MultiTyepJson = "{\"name\":\"B\",\"age\":120,\"cost\":12000,\"flag\":3,\"valid\":true,\"f\":1.2,\"d\":1.5,\"l\":12345678912345}";
-	
+
 	public void testObjMixte() throws Exception {
 		T2 r = JSONValue.parse(MultiTyepJson, T2.class);
 		assertEquals("B", r.name);
@@ -27,7 +27,7 @@ public class TestMapPublic extends TestCase {
 	public void testObjMixtePrim() throws Exception {
 		T3 r = JSONValue.parse(MultiTyepJson, T3.class);
 		assertEquals("B", r.name);
-		assertEquals(Short.valueOf((short)120), r.age);
+		assertEquals(Short.valueOf((short) 120), r.age);
 		assertEquals(Integer.valueOf(12000), r.cost);
 		assertEquals(Byte.valueOf((byte) 3), r.flag);
 		assertEquals(Boolean.TRUE, r.valid);
@@ -60,6 +60,12 @@ public class TestMapPublic extends TestCase {
 		public Float f;
 		public Double d;
 		public Long l;
+	}
+
+	public static class T123 {
+		public T1 t1;
+		public T2 t2;
+		public T3 t3;
 	}
 
 }

@@ -32,6 +32,7 @@ import net.minidev.json.mapper.DefaultMapper;
 import net.minidev.json.mapper.DefaultMapperOrdered;
 import net.minidev.json.mapper.FakeMapper;
 import net.minidev.json.mapper.Mapper;
+import net.minidev.json.mapper.UpdaterMapper;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 
@@ -91,6 +92,23 @@ public class JSONValue {
 	/**
 	 * Parse input json as a mapTo class
 	 * 
+	 * mapTo can be a bean
+	 * 
+	 * @since 2.0
+	 */
+	public static <T> T parse(Reader in, T toUpdate) {
+		try {
+			JSONParser p = new JSONParser(DEFAULT_PERMISSIVE_MODE);
+			return p.parse(in, new UpdaterMapper<T>(toUpdate));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Parse input json as a mapTo class
+	 * 
 	 * @since 2.0
 	 */
 	protected static <T> T parse(Reader in, AMapper<T> mapper) {
@@ -114,6 +132,23 @@ public class JSONValue {
 		try {
 			JSONParser p = new JSONParser(DEFAULT_PERMISSIVE_MODE);
 			return p.parse(in, Mapper.getMapper(mapTo));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Parse input json as a mapTo class
+	 * 
+	 * mapTo can be a bean
+	 * 
+	 * @since 2.0
+	 */
+	public static <T> T parse(String in, T toUpdate) {
+		try {
+			JSONParser p = new JSONParser(DEFAULT_PERMISSIVE_MODE);
+			return p.parse(in, new UpdaterMapper<T>(toUpdate));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -422,7 +457,7 @@ public class JSONValue {
 			JSONValue.writeJSONString(value.toString(), out, compression);
 		} else if (value instanceof Enum<?>) {
 			@SuppressWarnings("rawtypes")
-			String s = ((Enum)value).name();
+			String s = ((Enum) value).name();
 			if (!compression.mustProtectValue(s))
 				out.append(s);
 			else {

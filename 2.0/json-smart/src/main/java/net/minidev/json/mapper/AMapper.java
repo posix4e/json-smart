@@ -16,6 +16,7 @@ package net.minidev.json.mapper;
  * limitations under the License.
  */
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import net.minidev.json.parser.ParseException;
 /**
@@ -51,6 +52,18 @@ public abstract class AMapper<T> {
 	}
 
 	/**
+	 * -------------
+	 */
+	public Object getValue(Object current, String key) {
+		throw new RuntimeException(ERR_MSG);		
+	}
+
+	// Object current, 
+	public Type getType(String key) {
+		throw new RuntimeException(ERR_MSG);		
+	}
+
+	/**
 	 * add a value in an array json object.
 	 */
 	public void addValue(Object current, Object value) throws ParseException, IOException {
@@ -70,7 +83,7 @@ public abstract class AMapper<T> {
 	public Object createArray() {
 		throw new RuntimeException(ERR_MSG);
 	}
-
+	
 	/**
 	 * Allow a mapper to converte a temprary structure to the final data format.
 	 * 

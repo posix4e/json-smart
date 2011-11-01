@@ -47,7 +47,7 @@ public class CollectionMapper {
 			else
 				instance = rawClass;
 			ba = BeansAccess.get(instance);
-			
+
 			keyType = type.getActualTypeArguments()[0];
 			valueType = type.getActualTypeArguments()[1];
 			if (keyType instanceof Class)
@@ -82,7 +82,19 @@ public class CollectionMapper {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void setValue(Object current, String key, Object value) {
-			((Map<Object, Object>) current).put(JSONUtil.convertTo(key, keyClass), JSONUtil.convertTo(value, valueClass));
+			((Map<Object, Object>) current).put(JSONUtil.convertTo(key, keyClass),
+					JSONUtil.convertTo(value, valueClass));
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Object getValue(Object current, String key) {
+			return ((Map<String, Object>) current).get(JSONUtil.convertTo(key, keyClass));
+		}
+
+		@Override
+		public Type getType(String key) {
+			return type;
 		}
 	};
 
@@ -121,6 +133,17 @@ public class CollectionMapper {
 		public void setValue(Object current, String key, Object value) {
 			((Map<String, Object>) current).put(key, value);
 		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Object getValue(Object current, String key) {
+			return ((Map<String, Object>) current).get(key);
+		}
+
+		@Override
+		public Type getType(String key) {
+			return type;
+		}
 	};
 
 	public static class ListType<T> extends AMapper<T> {
@@ -131,7 +154,7 @@ public class CollectionMapper {
 		Type valueType;
 		Class<?> valueClass;
 		BeansAccess ba;
-		
+
 		public ListType(ParameterizedType type) {
 			this.type = type;
 			rawClass = (Class<?>) type.getRawType();
@@ -145,7 +168,6 @@ public class CollectionMapper {
 				valueClass = (Class<?>) valueType;
 			else
 				valueClass = (Class<?>) ((ParameterizedType) valueType).getRawType();
-			
 		}
 
 		@Override

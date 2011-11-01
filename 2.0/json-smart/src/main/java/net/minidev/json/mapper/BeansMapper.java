@@ -15,14 +15,17 @@ package net.minidev.json.mapper;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import net.minidev.asm.Accessor;
 import net.minidev.asm.BeansAccess;
 import net.minidev.json.JSONUtil;
 
-public class BeansMapper<T> extends AMapper<T> {
+public abstract class BeansMapper<T> extends AMapper<T> {
 
+	public abstract Object getValue(Object current, String key);
+	
 	public static class Bean<T> extends AMapper<T> {
 		Class<T> clz;
 		BeansAccess ba;
@@ -40,9 +43,20 @@ public class BeansMapper<T> extends AMapper<T> {
 			Accessor nfo = index.get(key);
 			if (nfo == null)
 				throw new RuntimeException("Can not set " + key + " field in " + clz);
-			// if (nfo.getType().isEnum())
 			value = JSONUtil.convertTo(value, nfo.getType());
 			ba.set(current, nfo.getIndex(), value);
+		}
+
+		public Object getValue(Object current, String key) {
+			Accessor nfo = index.get(key);
+			if (nfo == null)
+				throw new RuntimeException("Can not set " + key + " field in " + clz);
+			return ba.get(current, nfo.getIndex());
+		}
+		@Override
+		public Type getType(String key) {
+			Accessor nfo = index.get(key);
+			return nfo.getGenericType();
 		}
 
 		@Override
