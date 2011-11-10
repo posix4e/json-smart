@@ -22,7 +22,7 @@ public class TestUpdater extends TestCase {
 		assertEquals((Long) 120000L, t3.l);
 	}
 
-	public void testUpdate2() throws Exception {
+	public void testUpdateExistingBeans() throws Exception {
 		T123 t123 = new T123();
 		T1 t1 = new T1(); 
 		T2 t2 = new T2(); 
@@ -31,11 +31,28 @@ public class TestUpdater extends TestCase {
 		t123.t2 = t2;
 		t123.t3 = t3;
 		
-		String s = "{\"t2\":{\"name\":\"value\"}}";
+		String s = "{\"t2\":{\"name\":\"valueT2\"},\"t3\":{\"name\":\"valueT3\"},}";
 		T123 res = JSONValue.parse(s, t123);
 		assertEquals(res, t123);
 		assertEquals(res.t2, t2);
-		assertEquals(res.t2.name, "value");
+		assertEquals(res.t2.name, "valueT2");
+		assertEquals(res.t3.name, "valueT3");
+	}
+
+	public void testUpdateNullBean() throws Exception {
+		T123 t123 = new T123();
+		T1 t1 = new T1(); 
+		T2 t2 = null; 
+		T3 t3 = null; 
+		t123.t1 = t1;
+		t123.t2 = t2;
+		t123.t3 = t3;
+		
+		String s = "{\"t2\":{\"name\":\"valueT2\"},\"t3\":{\"name\":\"valueT3\"},}";
+		T123 res = JSONValue.parse(s, t123);
+		assertEquals(res, t123);
+		assertEquals(res.t2.name, "valueT2");
+		assertEquals(res.t3.name, "valueT3");
 	}
 
 }

@@ -25,12 +25,14 @@ import net.minidev.json.JSONUtil;
 public abstract class BeansMapper<T> extends AMapper<T> {
 
 	public abstract Object getValue(Object current, String key);
-	
+
 	public static class Bean<T> extends AMapper<T> {
 		Class<T> clz;
 		BeansAccess ba;
 
-		HashMap<String, Accessor> index = new HashMap<String, Accessor>();
+		HashMap<String, Accessor> index;// = Collections.emptyMap();
+
+		// new HashMap<String, Accessor>();
 
 		public Bean(Class<T> clz) {
 			this.clz = clz;
@@ -53,6 +55,7 @@ public abstract class BeansMapper<T> extends AMapper<T> {
 				throw new RuntimeException("Can not set " + key + " field in " + clz);
 			return ba.get(current, nfo.getIndex());
 		}
+
 		@Override
 		public Type getType(String key) {
 			Accessor nfo = index.get(key);

@@ -36,9 +36,10 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+
 /**
- * Allow access reflect field using runtime generated accessor.
- * BeansAccessor is faster than java.lang.reflect.Method.invoke()
+ * Allow access reflect field using runtime generated accessor. BeansAccessor is
+ * faster than java.lang.reflect.Method.invoke()
  * 
  * @author uriel Chemouni
  */
@@ -55,6 +56,7 @@ public abstract class BeansAccess {
 			acc.index = i++;
 			map.put(acc.getName(), acc);
 		}
+		//map = FastMap.optimize(map);
 	}
 
 	public HashMap<String, Accessor> getMap() {
@@ -66,8 +68,9 @@ public abstract class BeansAccess {
 	}
 
 	private static ConcurrentHashMap<Class<?>, BeansAccess> cache = new ConcurrentHashMap<Class<?>, BeansAccess>();
-	//private final static ConcurrentHashMap<Type, AMapper<?>> cache;
-	
+
+	// private final static ConcurrentHashMap<Type, AMapper<?>> cache;
+
 	static public BeansAccess get(Class<?> type) {
 		{
 			BeansAccess access = cache.get(type);
@@ -140,6 +143,10 @@ public abstract class BeansAccess {
 				int i = 0;
 				for (Accessor acc : accs) {
 					mv.visitLabel(labels[i++]);
+					if (!acc.isWritable()) {
+						mv.visitInsn(RETURN);
+						continue;
+					}
 					mv.visitVarInsn(ALOAD, 1);
 					mv.visitTypeInsn(CHECKCAST, classNameInternal);
 					mv.visitVarInsn(ALOAD, 3);
@@ -175,6 +182,11 @@ public abstract class BeansAccess {
 				for (Accessor acc : accs) {
 					mv.visitLabel(labels[i++]);
 					mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+					if (!acc.isReadable()) {
+						mv.visitInsn(Opcodes.ACONST_NULL);
+						mv.visitInsn(ARETURN);
+						continue;
+					}
 					mv.visitVarInsn(ALOAD, 1);
 					mv.visitTypeInsn(CHECKCAST, classNameInternal);
 					Type fieldType = Type.getType(acc.getType());

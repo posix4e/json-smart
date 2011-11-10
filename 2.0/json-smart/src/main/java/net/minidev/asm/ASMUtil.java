@@ -57,7 +57,7 @@ class ASMUtil {
 				if (map.containsKey(fn))
 					continue;
 				Accessor acc = new Accessor(nextClass, field);
-				if (acc.field == null)
+				if (!acc.isUsable())
 					continue;
 				map.put(fn, acc);
 			}
@@ -144,8 +144,8 @@ class ASMUtil {
 	}
 
 	/**
-	 * Append the call of proper extract primitive type of an boxed object.
-	 * this methode use Number interface to unbox object
+	 * Append the call of proper extract primitive type of an boxed object. this
+	 * methode use Number interface to unbox object
 	 */
 	protected static void autoUnBoxing2(MethodVisitor mv, Type fieldType) {
 		switch (fieldType.getSort()) {
@@ -191,7 +191,9 @@ class ASMUtil {
 
 	/**
 	 * return a array of new Label (used for switch/case generation)
-	 * @param cnt number of label to return
+	 * 
+	 * @param cnt
+	 *            number of label to return
 	 */
 	protected static Label[] newLabels(int cnt) {
 		Label[] r = new Label[cnt];
@@ -199,5 +201,4 @@ class ASMUtil {
 			r[i] = new Label();
 		return r;
 	}
-
 }
