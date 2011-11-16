@@ -17,6 +17,13 @@ package net.minidev.asm;
  */
 import java.lang.reflect.Method;
 
+/**
+ * Simple extension from ClassLoader overiding the loadClass(String name,
+ * boolean resolve) method and allowing to register new classes
+ * 
+ * @author uriel
+ * 
+ */
 class DynamicClassLoader extends ClassLoader {
 	DynamicClassLoader(ClassLoader parent) {
 		super(parent);
@@ -24,10 +31,12 @@ class DynamicClassLoader extends ClassLoader {
 
 	private final static String BEAN_AC = BeansAccess.class.getName();
 	/**
-	 * Predefined define defineClass methos sig
+	 * Predefined define defineClass method signature (name, bytes, offset,
+	 * length)
 	 */
 	private final static Class<?>[] DEF_CLASS_SIG = new Class[] { String.class, byte[].class, int.class, int.class };
 
+	@Override
 	protected synchronized java.lang.Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 		/*
 		 * check class by fullname as String.
@@ -40,6 +49,12 @@ class DynamicClassLoader extends ClassLoader {
 		return super.loadClass(name, resolve);
 	}
 
+	/**
+	 * Call defineClass into the parent classLoader using the
+	 * method.setAccessible(boolean) hack
+	 * 
+	 * @see ClassLoader#defineClass(String, byte[], int, int)
+	 */
 	Class<?> defineClass(String name, byte[] bytes) throws ClassFormatError {
 		try {
 			// Attempt to load the access class in the same loader, which makes

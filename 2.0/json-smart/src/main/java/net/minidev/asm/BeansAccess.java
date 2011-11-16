@@ -46,6 +46,7 @@ import org.objectweb.asm.Type;
 public abstract class BeansAccess {
 	static private String MethodAccessName = BeansAccess.class.getName().replace('.', '/');
 	private HashMap<String, Accessor> map;
+	// private Map<String, Accessor> map;
 	private Accessor[] accs;
 
 	private void setAccessor(Accessor[] accs) {
@@ -56,7 +57,6 @@ public abstract class BeansAccess {
 			acc.index = i++;
 			map.put(acc.getName(), acc);
 		}
-		//map = FastMap.optimize(map);
 	}
 
 	public HashMap<String, Accessor> getMap() {
@@ -67,10 +67,20 @@ public abstract class BeansAccess {
 		return accs;
 	}
 
+	/**
+	 * cache used to store built BeansAccess
+	 */
 	private static ConcurrentHashMap<Class<?>, BeansAccess> cache = new ConcurrentHashMap<Class<?>, BeansAccess>();
 
 	// private final static ConcurrentHashMap<Type, AMapper<?>> cache;
 
+	/**
+	 * return the BeansAccess corresponding to a type
+	 * 
+	 * @param type
+	 *            to be access
+	 * @return the BeansAccess
+	 */
 	static public BeansAccess get(Class<?> type) {
 		{
 			BeansAccess access = cache.get(type);
@@ -108,6 +118,18 @@ public abstract class BeansAccess {
 		}
 	}
 
+	/**
+	 * Build reflect bytecode from accessor list.
+	 * 
+	 * @param type
+	 *            type to be access
+	 * @param accs
+	 *            used accessor
+	 * @param loader
+	 *            Loader used to store the generated class
+	 * 
+	 * @return the new reflect class
+	 */
 	private static Class<?> buildClass(Class<?> type, Accessor[] accs, DynamicClassLoader loader) {
 		String className = type.getName();
 		String accessClassName = className.concat("AccAccess");
@@ -239,22 +261,37 @@ public abstract class BeansAccess {
 		return loader.defineClass(accessClassName, data);
 	}
 
+	/**
+	 * set field value by field index
+	 */
 	abstract public void set(Object object, int methodIndex, Object value);
 
+	/**
+	 * get field value by field index
+	 */
 	abstract public Object get(Object object, int methodIndex);
 
+	/**
+	 * create a new targeted object
+	 */
 	abstract public Object newInstance();
 
+	/**
+	 * set field value by fieldname
+	 */
 	public void set(Object object, String methodName, Object value) {
 		set(object, getIndex(methodName), value);
 	}
 
+	/**
+	 * get field value by fieldname
+	 */
 	public Object get(Object object, String methodName) {
 		return get(object, getIndex(methodName));
 	}
 
 	/**
-	 * Returns the index of the accessor.
+	 * Returns the index of the field accessor.
 	 */
 	public int getIndex(String name) {
 		Accessor ac = map.get(name);

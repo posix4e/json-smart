@@ -27,21 +27,22 @@ import net.minidev.json.JSONUtil;
 
 public class CollectionMapper {
 	public static class MapType<T> extends AMapper<T> {
+		final ParameterizedType type;
+		final Class<?> rawClass;
+		final Class<?> instance;
+		final BeansAccess ba;
+		
+		final Type keyType;
+		final Type valueType;
+
+		final Class<?> keyClass;
+		final Class<?> valueClass;
+
 		AMapper<?> subMapper;
-		ParameterizedType type;
-		Class<?> rawClass;
-		Class<?> instance;
-
-		Type keyType;
-		Type valueType;
-
-		Class<?> keyClass;
-		Class<?> valueClass;
-		BeansAccess ba;
 
 		public MapType(ParameterizedType type) {
 			this.type = type;
-			rawClass = (Class<?>) type.getRawType();
+			this.rawClass = (Class<?>) type.getRawType();
 			if (rawClass.isInterface())
 				instance = JSONObject.class;
 			else
@@ -99,10 +100,11 @@ public class CollectionMapper {
 	};
 
 	public static class MapClass<T> extends AMapper<T> {
+		final Class<?> type;
+		final Class<?> instance;
+		final BeansAccess ba;
+		
 		AMapper<?> subMapper;
-		Class<?> type;
-		Class<?> instance;
-		BeansAccess ba;
 
 		public MapClass(Class<?> type) {
 			this.type = type;
@@ -110,7 +112,7 @@ public class CollectionMapper {
 				this.instance = JSONObject.class;
 			else
 				this.instance = type;
-			ba = BeansAccess.get(instance);
+			this.ba = BeansAccess.get(instance);
 		}
 
 		@Override
@@ -147,17 +149,19 @@ public class CollectionMapper {
 	};
 
 	public static class ListType<T> extends AMapper<T> {
+		final ParameterizedType type;
+		final Class<?> rawClass;
+		final Class<?> instance;
+		final BeansAccess ba;
+
+		final Type valueType;
+		final Class<?> valueClass;
+
 		AMapper<?> subMapper;
-		ParameterizedType type;
-		Class<?> rawClass;
-		Class<?> instance;
-		Type valueType;
-		Class<?> valueClass;
-		BeansAccess ba;
 
 		public ListType(ParameterizedType type) {
 			this.type = type;
-			rawClass = (Class<?>) type.getRawType();
+			this.rawClass = (Class<?>) type.getRawType();
 			if (rawClass.isInterface())
 				instance = JSONArray.class;
 			else
@@ -197,10 +201,11 @@ public class CollectionMapper {
 	};
 
 	public static class ListClass<T> extends AMapper<T> {
+		final Class<?> type;
+		final Class<?> instance;
+		final BeansAccess ba;
+		
 		AMapper<?> subMapper;
-		Class<?> instance;
-		Class<?> type;
-		BeansAccess ba;
 
 		public ListClass(Class<?> clazz) {
 			this.type = clazz;

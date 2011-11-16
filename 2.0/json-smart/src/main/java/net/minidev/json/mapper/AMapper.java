@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 
 import net.minidev.json.parser.ParseException;
 /**
- * default datatype mapper use by Json-smart ton store data.
+ * Default datatype mapper use by Json-smart ton store data.
  * 
  * @author uriel Chemouni
  *

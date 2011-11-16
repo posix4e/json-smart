@@ -38,10 +38,11 @@ public class ArraysMapper<T> extends AMapper<T> {
 	}
 
 	public static class GenericMapper<T> extends ArraysMapper<T> {
-		Class<?> componentType;
+		final Class<?> componentType;
+		AMapper<?> subMapper;
 
 		public GenericMapper(Class<T> type) {
-			componentType = type.getComponentType();
+			this.componentType = type.getComponentType();
 		}
 
 		@SuppressWarnings("unchecked")
@@ -54,8 +55,6 @@ public class ArraysMapper<T> extends AMapper<T> {
 				r[p++] = e;
 			return (T) r;
 		}
-
-		AMapper<?> subMapper;
 
 		@Override
 		public AMapper<?> startArray(String key) {

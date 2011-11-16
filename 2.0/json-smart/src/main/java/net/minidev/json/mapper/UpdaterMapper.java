@@ -6,8 +6,8 @@ import java.lang.reflect.Type;
 import net.minidev.json.parser.ParseException;
 
 public class UpdaterMapper<T> extends AMapper<T> {
-	T obj;
-	AMapper<?> mapper;
+	final T obj;
+	final AMapper<?> mapper;
 
 	public UpdaterMapper(T obj) {
 		if (obj == null)

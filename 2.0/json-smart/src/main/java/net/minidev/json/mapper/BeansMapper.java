@@ -27,17 +27,14 @@ public abstract class BeansMapper<T> extends AMapper<T> {
 	public abstract Object getValue(Object current, String key);
 
 	public static class Bean<T> extends AMapper<T> {
-		Class<T> clz;
-		BeansAccess ba;
-
-		HashMap<String, Accessor> index;// = Collections.emptyMap();
-
-		// new HashMap<String, Accessor>();
+		final Class<T> clz;
+		final BeansAccess ba;
+		final HashMap<String, Accessor> index;
 
 		public Bean(Class<T> clz) {
 			this.clz = clz;
-			ba = BeansAccess.get(clz);
-			index = ba.getMap();
+			this.ba = BeansAccess.get(clz);
+			this.index = ba.getMap();
 		}
 
 		@Override
