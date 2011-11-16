@@ -31,7 +31,7 @@ import net.minidev.json.mapper.Mapper;
  * @author Uriel Chemouni <uchemouni@gmail.com>
  */
 public class JSONNavi<T> {
-	private AMapper<T> mapper;
+	private AMapper<? super T> mapper;
 	private Object root;
 
 	private Stack<Object> stack = new Stack<Object>();
@@ -47,8 +47,14 @@ public class JSONNavi<T> {
 	public static JSONNavi<JSONAwareEx> newInstance() {
 		return new JSONNavi<JSONAwareEx>(DefaultMapperOrdered.DEFAULT);
 	}
+	
+	public static JSONNavi<JSONObject> newInstanceObject() {
+		JSONNavi<JSONObject> o = new JSONNavi<JSONObject>(Mapper.getMapper(JSONObject.class));
+		o.object();
+		return o;
+	}
 
-	public JSONNavi(AMapper<T> mapper) {
+	public JSONNavi(AMapper<? super T> mapper) {
 		this.mapper = mapper;
 	}
 
@@ -313,7 +319,8 @@ public class JSONNavi<T> {
 	}
 
 	/**
-	 * get the current value as boolean if the current Object is null or is not a boolean return false
+	 * get the current value as boolean if the current Object is null or is not
+	 * a boolean return false
 	 */
 	public boolean asBoolean() {
 		if (current instanceof Boolean)
@@ -414,6 +421,10 @@ public class JSONNavi<T> {
 		current = text;
 		store();
 		return this;
+	}
+
+	public T getRoot() {
+		return (T) root;
 	}
 
 	/**
