@@ -47,7 +47,7 @@ public class JSONNavi<T> {
 	public static JSONNavi<JSONAwareEx> newInstance() {
 		return new JSONNavi<JSONAwareEx>(DefaultMapperOrdered.DEFAULT);
 	}
-	
+
 	public static JSONNavi<JSONObject> newInstanceObject() {
 		JSONNavi<JSONObject> o = new JSONNavi<JSONObject>(Mapper.getMapper(JSONObject.class));
 		o.object();
@@ -90,6 +90,10 @@ public class JSONNavi<T> {
 
 	public boolean hasFailure() {
 		return failure;
+	}
+
+	public Object getCurrentObject() {
+		return current;
 	}
 
 	public JSONNavi<?> at(String key) {
