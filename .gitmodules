@@ -1,0 +1,6 @@
+[submodule "v1"]
+	path = v1
+	url = https://code.google.com/p/json-smart.v1/
+[submodule "v2"]
+	path = v2
+	url = https://code.google.com/p/json-smart.v2/
