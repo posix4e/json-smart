@@ -4,3 +4,6 @@
 [submodule "v2"]
 	path = v2
 	url = https://code.google.com/p/json-smart.v2/
+[submodule "wiki"]
+	path = wiki
+	url = https://code.google.com/p/json-smart.wiki/
